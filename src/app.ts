@@ -1,11 +1,11 @@
-const express = require('express')
+import express, { Request, Response } from 'express';
 const app = express()
-const port = 3000
+// const mongoose = require('mongoose');
 
-app.get('/', (req, res) => {
+
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+// console.log(process.cwd());
+export default app;
