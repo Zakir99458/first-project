@@ -1,11 +1,15 @@
 import express, { Request, Response } from 'express';
-const app = express()
+import cors from 'cors';
+const app = express();
 // const mongoose = require('mongoose');
 
+app.use(express.json());
+app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-})
+  const a = 10;
+  res.send(a);
+});
 
 // console.log(process.cwd());
 export default app;
