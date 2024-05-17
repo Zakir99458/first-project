@@ -9,6 +9,6 @@ router.post('/create-student', StudentControllers.createStudent);
 
 router.get('/', StudentControllers.getAllStudents);
 
-router.get('/:studentId', StudentControllers.getSinglStudent)
+router.get('/:studentId', StudentControllers.getSinglStudent);
 
 export const StudentRoutes = router;
