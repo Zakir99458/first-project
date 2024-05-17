@@ -1,10 +1,23 @@
 import { Request, Response } from 'express';
 import { StudentServices } from './student.service';
+import studentValidationSchema from './student.validation';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const { student: studentData } = req.body;
 
+// export default studentSchema;
+
+    const { student: studentData } = req.body;
+    const {error, value} = studentValidationSchema.validate(studentData);
+    console.log({error}, {value});
+    if(error){
+        res.status(500).json({
+            success: false,
+            message: 'created successfully',
+            date: error,
+          });
+    }
+    
     // will call service funct to send this data
     const result = await StudentServices.createStudentIntoDB(studentData);
 
@@ -15,6 +28,11 @@ const createStudent = async (req: Request, res: Response) => {
       date: result,
     });
   } catch (err) {
+    res.status(500).json({
+        success: false,
+        message: 'created successfully',
+        date: err,
+      });
     console.log(err);
   }
 };
