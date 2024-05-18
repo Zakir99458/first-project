@@ -1,50 +1,44 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-// Define Joi schemas for nested objects
-const userNameValidationSchema = Joi.object({
-    firstName: Joi.string().required().messages({
-      'any.required': 'First Name is required',
-      'string.empty': 'First Name cannot be empty',
-    }),
-    middleName: Joi.string(),
-    lastName: Joi.string().required().messages({
-      'any.required': 'Last Name is required',
-      'string.empty': 'Last Name cannot be empty',
-    }),
-  });
-  
-  const guardianValidationSchema = Joi.object({
-    fatherName: Joi.string().required(),
-    fatherOccupation: Joi.string().required(),
-    fatherContactNo: Joi.string().required(),
-    motherName: Joi.string().required(),
-    motherOccupation: Joi.string().required(),
-    motherContactNo: Joi.string().required(),
-  });
-  
-  const localGuardianValidationSchema = Joi.object({
-    name: Joi.string().required(),
-    occupation: Joi.string().required(),
-    contactNo: Joi.string().required(),
-    address: Joi.string().required(),
-  });
-  
-  // Define Joi schema for the Student model
-  const studentValidationSchema = Joi.object({
-    id: Joi.string().required(),
-    name: userNameValidationSchema.required(),
-    gender: Joi.string().valid('male', 'female', 'other').required(),
-    dateOfBirth: Joi.string(),
-    email: Joi.string().email().required(),
-    contactNo: Joi.string().required(),
-    emergencyContactNo: Joi.string().required(),
-    bloodGroup: Joi.string().valid('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'),
-    presentAddress: Joi.string().required(),
-    permanentAddress: Joi.string().required(),
-    guardian: guardianValidationSchema.required(),
-    localGuardian: localGuardianValidationSchema.required(),
-    profileImg: Joi.string(),
-    isActive: Joi.string().valid('active', 'blocked').default('active'),
-  });
+// Define Zod schemas for nested objects
+const userNameValidationSchema = z.object({
+  firstName: z.string().nonempty(),
+  middleName: z.string().optional(),
+  lastName: z.string().nonempty().regex(/^[A-Za-z]+$/),
+});
 
-  export default studentValidationSchema;
+const guardianValidationSchema = z.object({
+  fatherName: z.string().nonempty(),
+  fatherOccupation: z.string().nonempty(),
+  fatherContactNo: z.string().nonempty(),
+  motherName: z.string().nonempty(),
+  motherOccupation: z.string().nonempty(),
+  motherContactNo: z.string().nonempty(),
+});
+
+const localGuardianValidationSchema = z.object({
+  name: z.string().nonempty(),
+  occupation: z.string().nonempty(),
+  contactNo: z.string().nonempty(),
+  address: z.string().nonempty(),
+});
+
+// Define Zod schema for the Student model
+const studentValidationSchema = z.object({
+  id: z.string().nonempty(),
+  name: userNameValidationSchema,
+  gender: z.enum(['male', 'female', 'other']),
+  dateOfBirth: z.string().optional(),
+  email: z.string().email(),
+  contactNo: z.string().nonempty(),
+  emergencyContactNo: z.string().nonempty(),
+  bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']).optional(),
+  presentAddress: z.string().nonempty(),
+  permanentAddress: z.string().nonempty(),
+  guardian: guardianValidationSchema,
+  localGuardian: localGuardianValidationSchema,
+  profileImg: z.string().optional(),
+  isActive: z.enum(['active', 'blocked']).optional(),
+});
+
+export default studentValidationSchema;

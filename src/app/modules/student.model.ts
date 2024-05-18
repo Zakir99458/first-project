@@ -106,7 +106,7 @@ const studentSchema = new Schema<Student>({
     },
   },
   presentAddress: { type: String, required: true },
-  permanentAddres: { type: String, required: true },
+  permanentAddress: { type: String, required: true },
   guardian: {
     type: guardianSchema,
     required: true,
